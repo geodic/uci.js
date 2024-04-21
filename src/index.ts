@@ -1,7 +1,8 @@
 import { UciCommand } from "./uci";
-import { GoCommand, GoResultType, GoScoreStage, GoScoreType } from "./go";
+import { GoCommand } from "./go";
 import { IsReadyCommand } from "./isready";
 import { Command } from "./common";
+import type { output } from "./parsing";
 
 export enum PositionType {
   fen = 0,
@@ -9,7 +10,7 @@ export enum PositionType {
 }
 export class Engine {
   sendCommand: (cmd: string) => any;
-  command?: Command<any>;
+  command?: Command;
   protected position: {
     type: PositionType;
     moves: string[];
@@ -17,7 +18,7 @@ export class Engine {
   constructor(sendCommand: (cmd: string) => any) {
     this.sendCommand = sendCommand;
   }
-  async information(msg: string) {
+  async information(msg: output) {
     if (this.command === undefined) throw new Error();
     let completed = await this.command.process(msg);
     if (completed) {
@@ -50,7 +51,7 @@ export class Engine {
     this.runRawCommand("ucinewgame");
     this.setPosition(PositionType.startpos, []);
   }
-  execute(command: Command<any>): void {
+  execute(command: Command): void {
     if (this.command) throw new Error();
     this.command = command;
     let commandString = command.getCommandString();
