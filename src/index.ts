@@ -4,6 +4,7 @@ import { IsReadyCommand } from "./isready";
 import { Command } from "./common";
 import type { output } from "./parsing";
 
+export { UciCommand, GoCommand, IsReadyCommand };
 export enum PositionType {
   fen = 0,
   startpos = 1,
